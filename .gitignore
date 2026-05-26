@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+!README.md
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+results/
+data/
+models/
+*.pth
+*.pt
+*.safetensors
+*.ckpt
+atomic_candidates.json
