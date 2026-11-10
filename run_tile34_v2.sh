@@ -1,0 +1,8 @@
+#!/bin/bash
+cd ~/AnomalyAgent
+M=anthropic/claude-sonnet-5-5
+DEF="$(cat "$AGG_DATA_ROOT/exp_aa/outputs/aa_caption_tiles/target_anomaly_definition_neutral.txt")"
+$HOME/anomalyagent_venv/bin/python evaluate_agg_v12_target.py --unit tile --save_path ./results/agg_tile34_v2 --atomic_candidates_file atomic_candidates_agg_neutral.json --attn_implementation sdpa \
+  --target_anomaly_definition "$DEF" \
+  --planner_model_type api --planner_api_model $M --reflector_model_type api --reflector_api_model $M --reasoner_model_type api --reasoner_api_model $M \
+  --image_description_model_type api --image_description_api_model $M --atomic_candidate_llm_model_type api --atomic_candidate_llm_api_model $M --concurrent 1 2>&1 | tee ./results/agg_tile34_v2.log

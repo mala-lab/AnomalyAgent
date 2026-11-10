@@ -1,0 +1,16 @@
+{
+  "metal_sample_surface": {
+    "anomaly_candidates": [
+      "A soft-edged patch on the surface is slightly darker than the area around it.",
+      "A soft-edged patch on the surface is slightly lighter than the area around it.",
+      "A localized area differs in brightness from the surrounding fine granular texture.",
+      "A small blotch with the same granular texture looks faintly darker or brighter than its surroundings."
+    ],
+    "normal_candidates": [
+      "The surface has a uniform fine-grained texture with no distinct regions.",
+      "The surface is uniformly granular with consistent speckle density and brightness.",
+      "Brightness changes gradually across the surface without any localized patch.",
+      "The dark band and bright haze along the sample edge come from the sample boundary and lighting."
+    ]
+  }
+}

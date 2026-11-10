@@ -35,6 +35,9 @@ def _load_api_model(api_model: str, use_responses_api: bool = False) -> BaseChat
     init_kwargs = {}
     if provider == "openai":
         init_kwargs["use_responses_api"] = use_responses_api
+    if provider == "anthropic" and os.environ.get("ANTHROPIC_WORKSPACE_ID"):
+        # 워크스페이스에 연결되지 않은 API 키는 요청마다 워크스페이스 ID 헤더가 필요하다
+        init_kwargs["default_headers"] = {"anthropic-workspace-id": os.environ["ANTHROPIC_WORKSPACE_ID"]}
     if provider == "google_genai":
         try:
             import langchain_google_genai  # noqa: F401
@@ -191,7 +194,8 @@ class Context:
     )
 
     prompt4description: str = field(
-        default=prompts.PROMPT4DESCRIPTION,
+        default=(open(os.environ["AGG_CAPTION_PROMPT_FILE"], encoding="utf-8").read()
+                 if os.environ.get("AGG_CAPTION_PROMPT_FILE") else prompts.PROMPT4DESCRIPTION),
         metadata={
             "description": "The prompt template for description. "
             "Used to describe the visual condition of the object in the image."

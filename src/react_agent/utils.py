@@ -328,6 +328,31 @@ def _normalize_messages_for_api(messages: List[BaseMessage | Dict[str, str]]) ->
     return normalized_messages
 
 
+def _merge_system_messages(messages: List[BaseMessage | Dict[str, str]]) -> List[BaseMessage | Dict[str, str]]:
+    """Merge every system message into one SystemMessage at the front (Anthropic rejects non-consecutive system messages)."""
+    from langchain_core.messages import SystemMessage
+
+    def _text(content: Any) -> str:
+        if isinstance(content, str):
+            return content
+        if isinstance(content, list):
+            return "\n".join(it.get("text", "") if isinstance(it, dict) else str(it) for it in content)
+        return str(content)
+
+    system_texts: List[str] = []
+    rest: List[BaseMessage | Dict[str, str]] = []
+    for m in messages:
+        if isinstance(m, dict) and m.get("role") == "system":
+            system_texts.append(_text(m.get("content", "")))
+        elif isinstance(m, SystemMessage):
+            system_texts.append(_text(m.content))
+        else:
+            rest.append(m)
+    if not system_texts:
+        return messages
+    return [SystemMessage(content="\n\n".join(t for t in system_texts if t)), *rest]
+
+
 async def safe_api_invoke(
     model: BaseChatModel,
     messages: List[BaseMessage | Dict[str, str]],
@@ -362,6 +387,8 @@ async def safe_api_invoke(
     last_exception = None
     error_type = None
     
+    _last_payload: List[Any] = []
+
     async def _do_invoke():
         """Inner function to perform the actual API call."""
         # Normalize messages: convert PIL Image objects to base64 data URLs
@@ -372,6 +399,8 @@ async def safe_api_invoke(
         invoke_kwargs = {}
         api_model_id = _get_api_model_id_for_node(context, node_name)
         api_provider = get_api_model_provider(api_model_id)
+        if api_provider == "anthropic":
+            normalized_messages = _merge_system_messages(normalized_messages)
         
         # Apply generation parameters if specified in context
         if context.api_temperature is not None:
@@ -415,6 +444,7 @@ async def safe_api_invoke(
         ):
             invoke_kwargs["reasoning"] = {"effort": reasoning_effort.strip().lower()}
         
+        _last_payload[:] = list(normalized_messages)
         # Use bind() to apply parameters if any are specified
         # This is more reliable than passing kwargs to ainvoke directly
         if invoke_kwargs:
@@ -441,8 +471,10 @@ async def safe_api_invoke(
             # If we get here, the call succeeded
             if attempt > 0 and debug_errors:
                 print(f"[DEBUG] [{node_name}] API call succeeded on retry attempt {attempt + 1}")
+            from .prompt_dump import dump_api_call
+            dump_api_call(node_name, _last_payload, response, _get_api_model_id_for_node(context, node_name))
             return cast(AIMessage, response)
-            
+
         except asyncio.TimeoutError as e:
             last_exception = e
             error_type = "TimeoutError"

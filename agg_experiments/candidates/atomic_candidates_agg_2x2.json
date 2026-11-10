@@ -1,0 +1,12 @@
+{
+  "metal_sample_surface": {
+    "anomaly_candidates": [
+      "The surface has a few faint darker mottled patches.",
+      "Slightly darker, cloudy patches appear on the surface."
+    ],
+    "normal_candidates": [
+      "The surface has a uniform fine-grained texture with no distinct regions.",
+      "The only variation is slight mottling or shifts in brightness from the granular roughness."
+    ]
+  }
+}

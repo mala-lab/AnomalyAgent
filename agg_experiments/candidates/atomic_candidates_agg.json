@@ -1,0 +1,22 @@
+{
+  "metal_sample_surface": {
+    "anomaly_candidates": [
+      "The surface has a few faint darker mottled patches.",
+      "Slightly darker, cloudy patches appear on the surface.",
+      "The surface has uneven brightness with faint local patches.",
+      "A few patches on the surface look slightly darker and mottled.",
+      "Faint dark mottled areas stand out against the surrounding texture.",
+      "Hazy, diffuse darker regions are scattered on the surface.",
+      "Brightness is uneven, with faint local patches that differ from the rest."
+    ],
+    "normal_candidates": [
+      "The surface has a uniform fine-grained texture with no distinct regions.",
+      "The only variation is slight mottling or shifts in brightness from the granular roughness.",
+      "The surface is uniformly granular with consistent speckle density and brightness.",
+      "The surface texture is uniform and finely grained across the whole field.",
+      "No distinct region stands out from the fine granular texture.",
+      "Brightness varies only slightly, following the granular roughness of the surface.",
+      "The granular surface looks consistent in speckle density and brightness throughout."
+    ]
+  }
+}

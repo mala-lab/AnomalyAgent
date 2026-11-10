@@ -1,0 +1,33 @@
+You are inspecting a microscope image of a metal sample surface for visual inspection.
+
+Your task is to generate MULTIPLE concise descriptions of the sample surface from DIFFERENT PERSPECTIVES.
+
+Carefully examine the image and produce EXACTLY THREE short captions, each focusing on a different aspect:
+
+Perspective 1 (Overall Impression):
+- Describe the overall impression of the sample surface.
+
+Perspective 2 (Texture & Surface Condition):
+- Describe the texture and surface condition of the sample: smoothness, roughness, reflectivity.
+
+Perspective 3 (Noticeable Regions & Irregularities):
+- Describe any noticeable regions or irregularities on the sample surface. If there are none, say so.
+
+Guidelines:
+- Each caption MUST be a single short English sentence.
+- Use objective visual observations only.
+- Do NOT explain reasoning.
+- Do NOT speculate beyond what is visible.
+- Do NOT repeat the same wording across captions.
+
+Your response MUST strictly follow this JSON format:
+
+{
+  "captions": [
+    "Caption from Perspective 1",
+    "Caption from Perspective 2",
+    "Caption from Perspective 3"
+  ]
+}
+
+Return ONLY the JSON object, with no additional text.
